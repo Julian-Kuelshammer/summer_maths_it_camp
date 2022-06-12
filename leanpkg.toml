@@ -1,0 +1,8 @@
+[package]
+name = "summer_maths_it_camp"
+version = "0.1"
+lean_version = "leanprover-community/lean:3.42.1"
+path = "src"
+
+[dependencies]
+mathlib = {git = "https://github.com/leanprover-community/mathlib", rev = "8cad81ae3de9cfcd414abe7d2d3e1c33488d3f08"}
