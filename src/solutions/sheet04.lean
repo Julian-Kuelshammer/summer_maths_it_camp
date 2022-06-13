@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Author : Julian Kuelshammer
 -/
 
-import easy_mode.sheet03
+import solutions.sheet03
 
 /- Showing minimality
 
@@ -28,8 +28,8 @@ class almost_minimal_wo_one_smul (V : Type)
 instance : almost_minimal_wo_one_smul ℝ :=
 { add := λ v w, v + w,
   smul := λ a v, (0 : ℝ),
-  add_assoc := sorry,
-  zero_smul_eq := sorry,
-  smul_assoc := sorry,
-  add_smul := sorry,
-  smul_add := sorry, }
+  add_assoc := add_assoc,
+  zero_smul_eq := begin simp end,
+  smul_assoc := begin intros a b v, refl,  end,
+  add_smul := begin intros a b v, simp only [add_zero],  end,
+  smul_add := begin intros a v w, simp only [add_zero], end }
