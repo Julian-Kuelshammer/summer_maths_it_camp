@@ -4,16 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Author : Julian Kuelshammer
 -/
 
-import solutions.sheet07
+import hard_mode.sheet07
 
 /-
 
 # A general way to produce equivalence relations
 
 There is some general way to produce an equivalence relation from a function: Given a 
-function `f : X → Y`, one can define `x_1 ∼ x_2` iff `f (x_1) = f(x_2)`. One can even 
+function `f : X → Y`, one can define `x_1 ≈ x_2` iff `f (x_1) = f(x_2)`. One can even 
 assume the function `f` to be surjective, i.e. there exists a `Z` and a surjective 
-function `g : X → Z` such that `x_1 ∼ x_2` iff `g (x_1) = g(x_2)`. Let's try to prove 
+function `g : X → Z` such that `x_1 ≈ x_2` iff `g (x_1) = g(x_2)`. Let's try to prove 
 this in Lean.
 
 -/
