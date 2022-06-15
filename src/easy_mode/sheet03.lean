@@ -76,19 +76,25 @@ We continue by proving some well-known properties which hold in (real) vector sp
 -/
 
 lemma zero_unique_right_neutral (h : v + w = v)  :  w = 0 :=
-begin
-  sorry
-end 
+  calc w = 0 + w        : (zero_add w).symm
+    ...  = (-v + v) + w : by rw neg_add
+    ...  = -v + (v + w) : add_assoc _ _ _
+    ...  = -v + v       : by rw h    
+    ...  = 0            : neg_add v
 
 lemma zero_unique_left_neutral (h : w + v = v) : w = 0 :=
 begin
-  sorry
+  rw add_comm at h,
+  exact zero_unique_right_neutral h,
 end
 
 
-lemma zero_smul_eq_zero_vector (v : V) : (0 : ℝ) • v = 0 :=
+@[simp] lemma zero_smul_eq_zero_vector (v : V) : (0 : ℝ) • v = 0 :=
 begin
-  sorry
+  apply @zero_unique_right_neutral _ _ v,
+  nth_rewrite 0 ← one_smul v,
+  rw ← add_smul,
+  simp,
 end
 
 lemma neg_unique_right_add_inv (h : v + w = 0) :  w = -v :=
@@ -124,18 +130,36 @@ class minimal_vector_space_axioms (V : Type)
   minimal vector space axioms. However this means that there is no reason for any vector at all to exist 
   in `V`. So let's prove that the empty set satisfies these axioms. -/
 instance : minimal_vector_space_axioms empty :=
-_
+{ add := λ v w, v,
+  smul := λ a v, v, 
+  add_assoc := begin intros u v w, cases u, end,
+  zero_smul_eq := begin intros u v, cases u, end,
+  one_smul := begin intro u, cases u, end,
+  smul_assoc := begin intros a b v, cases v, end,
+  add_smul := begin intros a b v, cases v, end,
+  smul_add := begin intros a v w, cases v, end }
 
 /- Let's prove that any real_vector_space satisfies the minimal vector space axioms, which is not too difficult, '
   there is only one axiom which is already included in the axioms and that is immediately true. -/
 def to_minimal_vector_space_axioms (V : Type) [real_vector_space V] : minimal_vector_space_axioms V :=
-_
+{ add := λ v w, v+w,
+  smul := λ a v, a • v,
+  add_assoc := real_vector_space.add_assoc,
+  zero_smul_eq := begin simp end,
+  one_smul := real_vector_space.one_smul,
+  smul_assoc := real_vector_space.smul_assoc,
+  add_smul := real_vector_space.add_smul,
+  smul_add := real_vector_space.smul_add }
 
 /- In the other direction, the difference seems larger, so let's try to prove some of the axioms which are missing. -/
 
 lemma minimal_vector_space_axioms.add_zero (V : Type) [minimal_vector_space_axioms V] (v w : V) : v + (0 : ℝ) • w = v :=
 begin 
-  sorry
+  rw minimal_vector_space_axioms.zero_smul_eq w v,
+  nth_rewrite 0 ← minimal_vector_space_axioms.one_smul v,
+  rw ← minimal_vector_space_axioms.add_smul,
+  simp only [add_zero],
+  rw minimal_vector_space_axioms.one_smul,
 end
 
 lemma minimal_vector_space_axioms.zero_add (V : Type) [minimal_vector_space_axioms V] (v w : V) : (0 : ℝ) • w + v = v :=
@@ -167,9 +191,9 @@ end
 noncomputable def to_real_vector_space (V : Type) [minimal_vector_space_axioms V] (h : nonempty V) : real_vector_space V :=
 { zero := begin let v := h.some, exact ((0 : ℝ) • v) end,
   neg := begin intro v, exact ((-1 : ℝ) • v) end, 
-  add_assoc := sorry,
-  add_comm := sorry,
-  add_zero := sorry,
+  add_assoc := minimal_vector_space_axioms.add_assoc,
+  add_comm := minimal_vector_space_axioms.add_comm _,
+  add_zero := begin intro v, rw minimal_vector_space_axioms.add_zero end, 
   zero_add := sorry,
   add_neg := sorry,
   neg_add := sorry,
