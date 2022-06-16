@@ -34,13 +34,10 @@ def equivalence := reflexive r ∧ symmetric r ∧ transitive r
 
 -/
 
-structure nat_plane :=
-(fst : ℕ) (snd : ℕ)
-
-def R (r s : nat_plane) : Prop := 
+def R (r s : ℕ × ℕ) : Prop := 
 r.1+s.2=s.1+r.2
 
-lemma R_def (r s : nat_plane) :
+lemma R_def (r s : ℕ × ℕ) :
 R r s ↔ r.1 + s.2 = s.1 + r.2 := 
 begin
   sorry
@@ -70,7 +67,7 @@ end
 
 /- A setoid on a Type is a relation together with the fact that 
   this relation is an equivalence relation. -/
-instance s : setoid (nat_plane) :=
+instance s : setoid (ℕ × ℕ) :=
 _
 
 structure int_plane_non_zero :=

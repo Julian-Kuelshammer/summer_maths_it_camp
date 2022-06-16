@@ -45,39 +45,39 @@ attribute [instance] s
 -- were using before are just notation for this function, i.e. `quotient.mk x = ⟦x⟧`. 
 -- Let's see that this is true by definition. 
 
-example (x : nat_plane) : quotient.mk x = ⟦x⟧ :=
+example (x : ℕ × ℕ) : quotient.mk x = ⟦x⟧ :=
 begin
   sorry
 end 
 
 -- Furthermore, `≈` is just notation for `R`
 -- (this is handy to know; let's give it a name so we can rewrite it)
-lemma equiv_def (r s : nat_plane) : r ≈ s ↔ R r s :=
+lemma equiv_def (r s : ℕ × ℕ) : r ≈ s ↔ R r s :=
 begin
   sorry
 end
 
 -- One of our demands was that the function `q` is surjective. Let's try to prove that. 
-lemma q_surj : function.surjective (λ (r : nat_plane), quotient.mk r) :=
+lemma q_surj : function.surjective (λ (r : ℕ × ℕ), quotient.mk r) :=
 begin
   sorry
 end
 
 -- The second property we were after, namely that `x ≈ x'` iff `q(x) = q(x')` is called `quotient.eq`.
 
-example (r s : nat_plane) : ⟦r⟧ = ⟦s⟧ ↔ r ≈ s :=
+example (r s : ℕ × ℕ) : ⟦r⟧ = ⟦s⟧ ↔ r ≈ s :=
 begin
   sorry -- so `rw quotient.eq` is often useful
 end
 
 -- Both implications also have names
 
-example (r s : nat_plane) : ⟦r⟧ = ⟦s⟧ → r ≈ s :=
+example (r s : ℕ × ℕ) : ⟦r⟧ = ⟦s⟧ → r ≈ s :=
 begin
   sorry
 end
 
-example (r s : nat_plane) : r ≈ s → ⟦r⟧ = ⟦s⟧ :=
+example (r s : ℕ × ℕ) : r ≈ s → ⟦r⟧ = ⟦s⟧ :=
 begin
   sorry
 end 

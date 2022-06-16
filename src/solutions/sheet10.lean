@@ -5,6 +5,8 @@ Author : Julian Kuelshammer
 -/
 
 import solutions.sheet09
+import tactic.ring
+import tactic.linarith
 
 /-
 
@@ -25,14 +27,14 @@ addition as it only has one input, not two.
 
 
 
-lemma neg_well_defined (x y : nat_plane) (h : x ≈ y) : ⟦(⟨x.2,x.1⟩ : nat_plane)⟧ = ⟦⟨y.2, y.1⟩⟧ :=
+lemma neg_well_defined (x y : ℕ × ℕ) (h : x ≈ y) : ⟦(x.2,x.1)⟧ = ⟦(y.2, y.1)⟧ :=
 begin
   apply quotient.sound,
-  rw [equiv_def, R_def] at *,
+  rw [equiv_def] at *,
   rw [add_comm, ← h, add_comm],
 end
 
-def neg : myint → myint := quotient.lift (λ (x : nat_plane), ⟦(⟨x.2, x.1⟩ : nat_plane)⟧) (neg_well_defined)
+def neg : myint → myint := quotient.lift (λ (x : ℕ × ℕ), ⟦(x.2, x.1)⟧) (neg_well_defined)
 
 instance : has_neg myint :=
 { neg := neg }
@@ -47,16 +49,115 @@ in order to reach the conclusion for `f`. Since this is a common situation, ther
 
 -/
 
-def neg2 : myint → myint := quotient.map (λ x, ⟨x.2, x.1⟩) 
+def neg2 : myint → myint := quotient.map (λ x, (x.2, x.1)) 
 begin 
   intros x y hxy,
-  rw [equiv_def, R_def] at *,
+  rw [equiv_def] at *,
   rw [add_comm, ← hxy, add_comm],
 end
 
 /- Why do the two definitions just defined agree? -/
 lemma defn_neg_agree : neg = neg2 :=
 begin
-  sorry
+  refl
 end
+
+/- 
+
+Our next step will be to provide an addition and a multiplication on `myint` and prove that `myint` 
+with these operations forms a commutative ring. To recall, a commutative ring is a set `R` 
+together with operations `+: R×R → R` and `*: R×R → R` such that the following axioms hold:
+(R1) `(x+y)+z=x+(y+z)` for all `x y z : R`
+(R2) `x+y=y+x` for all `x y : R`
+(R3) `∃ 0 : x+0=x=0+x` for all `x : R`
+(R4) `∀ x ∃ -x : x + (-x) = (-x) + x = 0`
+(R5) `(x * y) * z = x * (y * z)`
+(R6) `∃ 1 : 1 * x = x`
+(R7) `x * y = y * x` for all `x y : R`
+(R8) `x * (y + z) = x * y + x * z` for all `x y z : R`
+
+In fact, for lean addition is not a function `R×R → R`, but rather a function `R → (R → R)`, or 
+`R → R → R` as in contrast to addition and multiplication, `→` is right associative in Lean.  
+The function `R → (R → R)` takes a ring element `x : R` and sends it to the function `R → R` 
+which sends `y : R` to `x + y`, in λ-notation `λ y, x+y`. In computer science, the correspondence 
+between functions `R×R → R` and `R → (R → R)` is called currying after Haskell Curry. For 
+mathematicians (using category theory), it is just a special case of the concept of an adjunction,
+i.e. the functors of taking cartesian product  `- × R` and taking Hom in the category of sets 
+`Hom(R,-)` are adjoint to each other.    
+
+We want to define addition `myint × myint → myint` or equivalently `myint → myint → myint`. 
+If we think about the first incarnation, we could do that as follows: First we prove that 
+given an equivalence relation on `X` and an equivalence relation on `Y` we prove that there 
+is an equivalence relation on `X × Y` given by `(x,y) ≈ (x',y')` iff `x ≈ x'` and `y ≈ y'`. 
+Then we do the same steps as before. Applying currying, in the other way of thinking, 
+we would have to do a two-step process of constructing a function from the quotient `myint` to 
+the set of functions from the quotient `myint` to `myint`. Luckily, we don't have to think in 
+detail about what this entails - binary operations are a common enough thing that Lean has a 
+special construction that does all in one step, namely `quotient.map₂`. 
+
+-/
+
+def add : myint → myint → myint := quotient.map₂ (λ r s, (r.1+s.1, r.2+s.2)) 
+begin 
+intros r s hrs,
+intros u v huv,
+rw [equiv_def] at *,
+dsimp, /- dsimp is optional, just to make it clear that we can apply linarith after. -/
+linarith,
+end 
+
+instance : has_add myint :=
+{ add := add }
+
+def mul : myint → myint → myint := quotient.map₂ (λ r s, (r.1*s.1+r.2*s.2, r.1*s.2+r.2*s.1))
+begin
+  intros r s hrs,
+  intros u v huv,
+  rw [equiv_def] at *,
+  dsimp, /- again dsimp is optional to make it clear that nlinarith after is possible, but 
+            linarith won't work. -/
+  nlinarith,
+end
+
+instance : has_mul myint :=
+{ mul := mul }
+
+/- Now we have to prove the ring axioms. For this, we have to prove something for all equivalence 
+classes `r s t : myint`. We would rather like to check this on representatives. Then it becomes 
+easy. To do this (depending on the number of inputs) you can apply the lemmas 
+`quotient.induction_on r`, `quotient.induction_on₂ r s`, `quotient.induction_on₃ r s t`. To 
+simplify the goal view, after that you can put `clear r s t` but that is not strictly necessary. -/
+
+instance : comm_ring myint :=
+{ add := has_add.add,
+  add_assoc := begin intros r s t, apply quotient.induction_on₃ r s t, clear r s t, intros x y z,
+    apply quotient.sound, rw [equiv_def] at *, dsimp, linarith, end,
+  zero := ⟦(0,0)⟧,
+  zero_add := begin intro r, apply quotient.induction_on r, clear r, intro x, apply quotient.sound, 
+    rw [equiv_def] at *, simp only [zero_add], end,
+  add_comm := begin intros r s, apply quotient.induction_on₂ r s, clear r s, intros x y,
+    apply quotient.sound, rw [equiv_def] at *, linarith, end,
+  add_zero := begin intro r, apply quotient.induction_on r, clear r, intro x, apply quotient.sound, 
+    rw [equiv_def] at *, simp only [add_zero], end, 
+  neg := has_neg.neg,
+  add_left_neg := begin intro r, apply quotient.induction_on r, clear r, intro x, apply quotient.sound,
+    rw [equiv_def] at *, linarith, end,
+  mul := has_mul.mul,
+  mul_assoc := begin intros r s t, apply quotient.induction_on₃ r s t, clear r s t, intros x y z,
+    apply quotient.sound, rw [equiv_def] at *, dsimp, nlinarith, end,
+  one := ⟦(1,0)⟧,
+  one_mul := begin intro r, apply quotient.induction_on r, clear r, intro x, apply quotient.sound, 
+    rw [equiv_def] at *, dsimp, linarith, end,
+  mul_one := begin intro r, apply quotient.induction_on r, clear r, intro x, apply quotient.sound, 
+    rw [equiv_def] at *, dsimp, linarith, end,
+  left_distrib := begin intros r s t, apply quotient.induction_on₃ r s t, clear r s t, intros x y z,
+    apply quotient.sound, rw [equiv_def] at *, dsimp, nlinarith, end,
+  right_distrib := begin intros r s t, apply quotient.induction_on₃ r s t, clear r s t, intros x y z,
+    apply quotient.sound, rw [equiv_def] at *, dsimp, nlinarith, end,
+  mul_comm := begin intros r s, apply quotient.induction_on₂ r s, clear r s, intros x y, 
+    apply quotient.sound, rw [equiv_def] at *, dsimp, linarith, end, }
+
+
+
+
 
