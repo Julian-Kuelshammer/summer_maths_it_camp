@@ -5,6 +5,7 @@ Author : Julian Kuelshammer
 -/
 
 import data.int.basic
+import tactic.linear_combination
 
 /- 
 # Quotients in Lean 
@@ -92,23 +93,16 @@ def S (r s : int_plane_non_zero) : Prop :=
 r.1 * s.2 = s.1 * r.2
 
 lemma S_def (r s : int_plane_non_zero) : 
-S r s ↔ r.1 * s.2 = s.1 * r.2 :=
-begin
-  refl
-end
+S r s ↔ r.1 * s.2 = s.1 * r.2 := by refl
 
 lemma S_refl : reflexive S :=
-begin
-  intro r,
-  rw S_def,
-end
+λ r, by rw S_def
 
 lemma S_symm : symmetric S :=
 begin
   intros r s hrs,
   rw S_def at *,
-  symmetry,
-  assumption, 
+  exact hrs.symm,
 end
 
 lemma S_trans : transitive S :=
@@ -116,15 +110,7 @@ begin
   intros r s t hrs hst,
   rw S_def at *,
   rw ← mul_right_inj' (s.non_zero),
-  rw [← mul_assoc],
-  rw [mul_comm s.snd],
-  rw hrs,
-  rw mul_comm,
-  rw ← mul_assoc,
-  rw mul_comm t.snd,
-  rw hst,
-  rw mul_comm t.fst,
-  rw mul_assoc,
+  linear_combination t.snd * hrs + r.snd * hst,
 end 
 
 lemma S_equiv : equivalence S := 
