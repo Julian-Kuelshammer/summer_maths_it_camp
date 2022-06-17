@@ -52,7 +52,7 @@ end
 
 -- Furthermore, `≈` is just notation for `R`
 -- (this is handy to know; let's give it a name so we can rewrite it)
-lemma equiv_def (r s : ℕ × ℕ) : r ≈ s ↔ R r s :=
+lemma equiv_def (r s : ℕ × ℕ) : r ≈ s ↔ r.1 + s.2 = s.1 + r.2 :=
 begin
   sorry
 end
