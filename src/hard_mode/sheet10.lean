@@ -111,22 +111,7 @@ easy. To do this (depending on the number of inputs) you can apply the lemmas
 simplify the goal view, after that you can put `clear r s t` but that is not strictly necessary. -/
 
 instance : comm_ring myint :=
-{ add := sorry,
-  add_assoc := begin sorry end,
-  zero := sorry,
-  zero_add := begin sorry end,
-  add_comm := begin sorry end,
-  add_zero := begin sorry end, 
-  neg := sorry,
-  add_left_neg := begin sorry end,
-  mul := sorry,
-  mul_assoc := begin sorry end,
-  one := sorry,
-  one_mul := begin sorry end,
-  mul_one := begin sorry end,
-  left_distrib := begin sorry end,
-  right_distrib := begin sorry end,
-  mul_comm := begin sorry end, }
+_
 
 
 
