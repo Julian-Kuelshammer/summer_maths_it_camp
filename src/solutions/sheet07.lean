@@ -39,23 +39,16 @@ def R (r s : ℕ × ℕ ) : Prop :=
 r.1+s.2=s.1+r.2
 
 lemma R_def (r s : ℕ × ℕ) :
-R r s ↔ r.1 + s.2 = s.1 + r.2 := 
-begin
-  refl,
-end
+R r s ↔ r.1 + s.2 = s.1 + r.2 := by refl
 
 lemma R_refl : reflexive R :=
-begin
-  intro r,
-  rw R_def,
-end
+λ r, by rw R_def
 
 lemma R_symm : symmetric R :=
 begin
   intros r s hrs,
   rw R_def at *,
-  symmetry,
-  assumption,
+  exact hrs.symm,
 end 
 
 lemma R_trans : transitive R :=
