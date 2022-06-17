@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Author : Julian Kuelshammer
 -/
 
-import easy_mode.sheet08
+import hard_mode.sheet08
 
 /-
 

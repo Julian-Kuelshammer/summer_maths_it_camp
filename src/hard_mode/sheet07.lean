@@ -67,7 +67,7 @@ end
 
 /- A setoid on a Type is a relation together with the fact that 
   this relation is an equivalence relation. -/
-instance s : setoid (nat_plane) :=
+instance s : setoid (ℕ × ℕ) :=
 _
 
 structure int_plane_non_zero :=
