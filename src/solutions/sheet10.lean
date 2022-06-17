@@ -6,7 +6,6 @@ Author : Julian Kuelshammer
 
 import solutions.sheet09
 import tactic.ring
-import tactic.linarith
 
 /-
 

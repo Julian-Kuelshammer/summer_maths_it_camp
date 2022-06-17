@@ -6,7 +6,6 @@ Author : Julian Kuelshammer
 
 import easy_mode.sheet09
 import tactic.ring
-import tactic.linarith
 
 /-
 

@@ -6,6 +6,7 @@ Author : Julian Kuelshammer
 
 import data.int.basic
 import tactic.linear_combination
+import tactic.linarith
 
 /- 
 # Quotients in Lean 
@@ -56,15 +57,7 @@ begin
   intros r s t hrs hst,
   rw R_def at *,
   rw ← add_right_inj s.snd,
-  rw [← add_assoc],
-  rw [add_comm s.snd],
-  rw hrs,
-  rw add_comm,
-  rw ← add_assoc,
-  rw add_comm t.snd,
-  rw hst,
-  rw add_comm t.fst,
-  rw add_assoc,
+  linarith,
 end 
 
 lemma R_equiv : equivalence R :=

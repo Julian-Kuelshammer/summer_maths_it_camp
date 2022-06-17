@@ -6,6 +6,7 @@ Author : Julian Kuelshammer
 
 import data.int.basic
 import tactic.linear_combination
+import tactic.linarith
 
 /- 
 # Quotients in Lean 

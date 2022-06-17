@@ -5,6 +5,8 @@ Author : Julian Kuelshammer
 -/
 
 import data.int.basic
+import tactic.linarith
+import tactic.linear_combination
 
 /- 
 # Quotients in Lean 
