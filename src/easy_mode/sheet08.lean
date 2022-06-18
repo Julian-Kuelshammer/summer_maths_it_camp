@@ -74,37 +74,31 @@ S (f x1) (f x2)
 lemma fun_rel.to_rel_def {X Y : Type} (S : Y → Y → Prop) (f : X → Y) 
 (x_1 x_2 : X) : (fun_rel.to_rel S f) x_1 x_2 ↔ S (f x_1) (f x_2) :=
 begin
-  refl,
+  sorry
 end
 
 lemma fun_rel.to_rel_refl {X Y : Type} {S : Y → Y → Prop} (hS : reflexive S) (f : X → Y) : 
   reflexive (fun_rel.to_rel S f) :=
 begin
-  intro x,
-  rw fun_rel.to_rel_def,
-  exact hS (f x),
+  sorry
 end
 
 lemma fun_rel.to_rel_symm {X Y : Type} {S : Y → Y → Prop} (hS : symmetric S) (f : X → Y) : 
   symmetric (fun_rel.to_rel S f) :=
 begin
-  intros x x' hxx',
-  rw fun_rel.to_rel_def at *,
-  exact hS hxx',
+  sorry
 end
 
 lemma fun_rel.to_rel_trans {X Y : Type} {S : Y → Y → Prop} (hS : transitive S) (f : X → Y) : 
   transitive (fun_rel.to_rel S f) :=
 begin
-  intros x x' x'' hxx' hx'x'',
-  rw fun_rel.to_rel_def at *,
-  exact hS hxx' hx'x'',
+  sorry
 end
 
 lemma fun_rel.to_rel_equiv {X Y : Type} {S : Y → Y → Prop} (hS : equivalence S) (f : X → Y) : 
   equivalence (fun_rel.to_rel S f) :=
 begin
-  exact ⟨fun_rel.to_rel_refl hS.1 f, fun_rel.to_rel_symm hS.2.1 f, fun_rel.to_rel_trans hS.2.2 f⟩,
+  sorry
 end
 
 instance fun_rel.to_setoid {X Y : Type} {S : Y → Y → Prop} (hS : equivalence S) (f : X → Y) : 
