@@ -36,3 +36,95 @@ begin
   sorry
 end
 
+/-
+
+If you need a bit more practice, here is a slightly more general situation. Given an 
+equivalence relation on a type Y and a function f : X → Y, there is an equivalence relation 
+on X, pulled back from Y, given by two elements of X being related iff there images under 
+f are related. What we did up until now on this sheet is a special case where the equivalence 
+relation on Y is given by equality. 
+
+-/
+
+def fun_rel.to_rel {X Y : Type} (S : Y → Y → Prop) (f : X → Y) 
+  (x1 x2 : X) : Prop :=
+sorry
+
+lemma fun_rel.to_rel_def {X Y : Type} (S : Y → Y → Prop) (f : X → Y) 
+(x_1 x_2 : X) : (fun_rel.to_rel S f) x_1 x_2 ↔ S (f x_1) (f x_2) :=
+begin
+  sorry
+end
+
+lemma fun_rel.to_rel_refl {X Y : Type} {S : Y → Y → Prop} (hS : reflexive S) (f : X → Y) : 
+  reflexive (fun_rel.to_rel S f) :=
+begin
+  sorry
+end
+
+lemma fun_rel.to_rel_symm {X Y : Type} {S : Y → Y → Prop} (hS : symmetric S) (f : X → Y) : 
+  symmetric (fun_rel.to_rel S f) :=
+begin
+  sorry
+end
+
+lemma fun_rel.to_rel_trans {X Y : Type} {S : Y → Y → Prop} (hS : transitive S) (f : X → Y) : 
+  transitive (fun_rel.to_rel S f) :=
+begin
+  sorry
+end
+
+lemma fun_rel.to_rel_equiv {X Y : Type} {S : Y → Y → Prop} (hS : equivalence S) (f : X → Y) : 
+  equivalence (fun_rel.to_rel S f) :=
+begin
+  sorry
+end
+
+instance fun_rel.to_setoid {X Y : Type} {S : Y → Y → Prop} (hS : equivalence S) (f : X → Y) : 
+  setoid X :=
+{ r := fun_rel.to_rel S f,
+  iseqv := fun_rel.to_rel_equiv hS f }
+
+
+/- 
+
+And here is another situation which we will encounter soon. Given an equivalence relation R on 
+X and an equivalence relation S on Y, there is an equivalence relation on X × Y in which 
+two pairs are related if and only if there first and second entry are related. 
+
+
+-/
+
+def prod_rel {X Y : Type} (R : X → X → Prop) (S : Y → Y → Prop) 
+  (u v : X × Y) : Prop :=
+sorry
+
+lemma prod_rel_def {X Y : Type} {R : X → X → Prop} {S : Y → Y → Prop} (u v : X × Y) :
+  prod_rel R S u v ↔ R u.1 v.1 ∧ S u.2 v.2 := 
+begin
+  sorry
+end
+
+lemma prod_rel_refl {X Y : Type} {R : X → X → Prop} {S : Y → Y → Prop} (hR : reflexive R)
+  (hS : reflexive S) : reflexive (prod_rel R S) :=
+begin 
+  sorry
+end
+
+lemma prod_rel_symm {X Y : Type} {R : X → X → Prop} {S : Y → Y → Prop} (hR : symmetric R)
+  (hS : symmetric S) : symmetric (prod_rel R S) :=
+begin
+  sorry
+end
+
+lemma prod_rel_trans {X Y : Type} {R : X → X → Prop} {S : Y → Y → Prop} (hR : transitive R)
+  (hS : transitive S) : transitive (prod_rel R S) :=
+begin
+  sorry
+end
+
+lemma prod_rel_equiv {X Y : Type} {R : X → X → Prop} {S : Y → Y → Prop} (hR : equivalence R)
+  (hS : equivalence S) : equivalence (prod_rel R S) :=
+begin
+  sorry
+end
